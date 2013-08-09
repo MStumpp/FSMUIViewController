@@ -9,6 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "State.h"
 
+#define tDidInitViewState 11
+#define tDidLoadViewState 12
+#define tWillAppearViewState 13
+#define tDidAppearViewState 14
+#define tWillDisappearViewState 15
+#define tDidDisappearViewState 16
+#define tWillUnloadViewState 17
+#define tDidUnloadViewState 18
+
 @interface StatefulUIViewController : UIViewController
 
 // state related
