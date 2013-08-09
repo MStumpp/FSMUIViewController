@@ -23,9 +23,9 @@
 // state related
 
 -(State*)configureState:(int)state;
+-(State*)configureDefaultState;
 -(void)toState:(int)state;
--(void)setInitialState:(int)state;
--(void)toInitialState;
+-(void)toDefaultState;
 
 // view queue related
 

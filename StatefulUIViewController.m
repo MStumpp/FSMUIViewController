@@ -8,12 +8,14 @@
 
 #import "StatefulUIViewController.h"
 
+#define tDefaultState 10
+
 @interface StatefulUIViewController ()
 
 // state related
 
 @property int currentState;
-@property int initState;
+@property int defaultState;
 
 @property int currentControllerViewState;
 @property int currentProcessedViewState;
@@ -34,7 +36,7 @@
     self = [super init];
     if (self) {
         self.currentState = nil;
-        self.initState = nil;
+        self.defaultState = tDefaultState;
         
         self.currentControllerViewState = tDidInitViewState;
         self.currentProcessedViewState = tDidInitViewState;
@@ -109,16 +111,9 @@
     return [self.states objectForKey:[NSNumber numberWithInt:state]];
 }
 
--(void)setInitialState:(int)state
+-(State*)configureDefaultState
 {
-    if (!state || ![self.states objectForKey:[NSNumber numberWithInt:state]])
-        [NSException raise:NSInvalidArgumentException format:@"State not registered!"]; 
-    self.initState = state;
-}
-
--(void)toInitialState
-{
-    [self toState:self.initState];
+    return [self configureState:self.defaultState];
 }
 
 -(void)toState:(int)state
@@ -128,6 +123,11 @@
     self.currentState = state;
     self.currentProcessedViewState = tDidInitViewState;
     [self processStateOnInit];
+}
+
+-(void)toDefaultState
+{
+    [self toState:self.defaultState];
 }
 
 // view queue
@@ -202,85 +202,85 @@
 {
     [(State*)[self.states objectForKey:[NSNumber 
         numberWithInt:self.currentState]] processState:tDidInitViewState];
-    [self processViews:tDidInitViewState];
+    [self processViewStates:tDidInitViewState];
     [self processStateOnViewDidLoad];
 }
 
 -(void)processStateOnViewDidLoad
 {
-    if (tDidLoadViewState <= self.currentViewControllerState && 
-        self.currentViewControllerState <= tDidAppearViewState) {
-        if (self.currentProcessedState < tDidLoadViewState) {
-            self.currentProcessedState = tDidLoadViewState;
+    if (tDidLoadViewState <= self.currentControllerViewState &&
+        self.currentControllerViewState <= tDidAppearViewState) {
+        if (self.currentProcessedViewState < tDidLoadViewState) {
+            self.currentProcessedViewState = tDidLoadViewState;
             [(State*)[self.states objectForKey:[NSNumber 
                 numberWithInt:self.currentState]] processState:tDidLoadViewState];
         }
-        [self processViews:tDidLoadViewState];
+        [self processViewStates:tDidLoadViewState];
         [self processStateOnViewWillAppear];
     }
 }
 
 -(void)processStateOnViewWillAppear
 {
-    if (tWillAppearViewState <= self.currentViewControllerState && 
-        self.currentViewControllerState <= tDidAppearViewState) {
-        if (self.currentProcessedState < tWillAppearViewState) {
-            self.currentProcessedState = tWillAppearViewState;
+    if (tWillAppearViewState <= self.currentControllerViewState &&
+        self.currentControllerViewState <= tDidAppearViewState) {
+        if (self.currentProcessedViewState < tWillAppearViewState) {
+            self.currentProcessedViewState = tWillAppearViewState;
             [(State*)[self.states objectForKey:[NSNumber 
                 numberWithInt:self.currentState]] processState:tWillAppearViewState];
         }
-        [self processViews:tWillAppearViewState];
+        [self processViewStates:tWillAppearViewState];
         [self processStateOnViewDidAppear];
     }
 }
 
 -(void)processStateOnViewDidAppear
 {
-    if (tDidAppearViewState <= self.currentViewControllerState && 
-        self.currentViewControllerState <= tDidAppearViewState) {
-        if (self.currentProcessedState < tDidAppearViewState) {
-            self.currentProcessedState = tDidAppearViewState;
+    if (tDidAppearViewState <= self.currentControllerViewState &&
+        self.currentControllerViewState <= tDidAppearViewState) {
+        if (self.currentProcessedViewState < tDidAppearViewState) {
+            self.currentProcessedViewState = tDidAppearViewState;
             [(State*)[self.states objectForKey:[NSNumber 
                 numberWithInt:self.currentState]] processState:tDidAppearViewState];
         }
-        [self processViews:tDidAppearViewState];
+        [self processViewStates:tDidAppearViewState];
     }
 }
 
-// - (void)processStateOnViewWillDisappear
-// {
-//     if (tViewWillDisappearState <= self.currentViewControllerState) {
-//         if (self.currentProcessedState < tViewWillDisappearState) {
-//             self.currentProcessedState = tViewWillDisappearState;
-//         }
-//     }
-// }
+- (void)processStateOnViewWillDisappear
+{
+     if (tWillDisappearViewState <= self.currentControllerViewState) {
+         if (self.currentProcessedViewState < tWillDisappearViewState) {
+             self.currentProcessedViewState = tWillDisappearViewState;
+         }
+     }
+}
 
-// - (void)processStateOnViewDidDisappear
-// {
-//     if (tViewDidDisappearState <= self.currentViewControllerState) {
-//         if (!(self.currentProcessedState < tViewDidDisappearState)) {
-//             self.currentProcessedState = tViewDidDisappearState;
-//         }
-//     }
-// }
+- (void)processStateOnViewDidDisappear
+{
+     if (tDidDisappearViewState <= self.currentControllerViewState) {
+         if (!(self.currentProcessedViewState < tDidDisappearViewState)) {
+             self.currentProcessedViewState = tDidDisappearViewState;
+         }
+     }
+}
 
-// - (void)processStateOnViewWillUnload
-// {
-//     if (tViewWillUnloadState <= self.currentViewControllerState) {
-//         if (self.currentProcessedState < tViewWillUnloadState) {
-//             self.currentProcessedState = tViewWillUnloadState;
-//         }
-//     }
-// }
+- (void)processStateOnViewWillUnload
+{
+     if (tWillUnloadViewState <= self.currentControllerViewState) {
+         if (self.currentProcessedViewState < tWillUnloadViewState) {
+             self.currentProcessedViewState = tWillUnloadViewState;
+         }
+     }
+}
 
-// - (void)processStateOnViewDidUnload
-// {
-//     if (tViewDidUnloadState <= self.currentViewControllerState) {
-//         if (self.currentProcessedState < tViewDidUnloadState) {
-//             self.currentProcessedState = tViewDidUnloadState;
-//         }
-//     }
-// }
+- (void)processStateOnViewDidUnload
+{
+     if (tDidUnloadViewState <= self.currentControllerViewState) {
+         if (self.currentProcessedViewState < tDidUnloadViewState) {
+             self.currentProcessedViewState = tDidUnloadViewState;
+         }
+     }
+}
 
 @end
