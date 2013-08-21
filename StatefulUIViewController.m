@@ -12,8 +12,6 @@
 
 @interface StatefulUIViewController ()
 
-// state related
-
 @property int currentState;
 @property int defaultState;
 
