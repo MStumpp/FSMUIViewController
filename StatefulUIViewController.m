@@ -22,11 +22,6 @@
 
 @property NSMutableDictionary *states;
 
-// view queue related
-
-@property NSMutableDictionary *viewOnce;
-@property NSMutableDictionary *viewForever;
-
 @end
 
 @implementation StatefulUIViewController
@@ -40,10 +35,7 @@
         
         self.currentControllerViewState = tDidInitViewState;
         self.currentProcessedViewState = tDidInitViewState;
-        self.states = [NSMutableDictionary dictionary];
-        
-        self.viewOnce = [NSMutableDictionary dictionary];
-        self.viewForever = [NSMutableDictionary dictionary];        
+        self.states = [NSMutableDictionary dictionary];    
     }
     return self;
 }
@@ -116,7 +108,7 @@
     return [self configureState:self.defaultState];
 }
 
--(void)toState:(int)state
+-(void)toStateForce:(int)state
 {
     if (!state || ![self.states objectForKey:[NSNumber numberWithInt:state]])
         [NSException raise:NSInvalidArgumentException format:@"State not configured!"];    
@@ -125,45 +117,9 @@
     [self processStateOnInit];
 }
 
--(void)toDefaultState
+-(void)toDefaultStateForce
 {
-    [self toState:self.defaultState];
-}
-
-// view queue
-
--(void)onViewState:(int)state doOnce:(ViewCallback)callback
-{
-    if (![self.viewOnce objectForKey:[NSNumber numberWithInt:state]])
-        [self.viewOnce addEntriesFromDictionary:[NSDictionary 
-            dictionaryWithObject:[NSMutableArray 
-                arrayWithObject:callback] forKey:[NSNumber numberWithInt:state]]];
-    else
-        [[self.viewOnce objectForKey:[NSNumber numberWithInt:state]] addObject:callback];
-    [self processStateOnInit];
-}
-
--(void)onViewState:(int)state when:(BOOL)when doOnce:(ViewCallback)callback
-{
-    if (when)
-        [self onViewState:state doOnce:callback];
-}
-
--(void)onViewState:(int)state doForever:(ViewCallback)callback
-{
-    if (![self.viewForever objectForKey:[NSNumber numberWithInt:state]])
-        [self.viewForever addEntriesFromDictionary:[NSDictionary 
-            dictionaryWithObject:[NSMutableArray 
-                arrayWithObject:callback] forKey:[NSNumber numberWithInt:state]]];
-    else
-        [[self.viewForever objectForKey:[NSNumber numberWithInt:state]] addObject:callback];
-    [self processStateOnInit];
-}
-
--(void)onViewState:(int)state when:(BOOL)when doForever:(ViewCallback)callback
-{
-    if (when)
-        [self onViewState:state doForever:callback];
+    [self toStateForce:self.defaultState];
 }
 
 -(void)processViewStates:(int)state
@@ -182,18 +138,6 @@
         }];
         [[self.viewOnce objectForKey:[NSNumber numberWithInt:state]] removeAllObjects];
     }
-}
-
--(void)removeAllOnces:(int)state
-{
-    if ([self.viewOnce objectForKey:[NSNumber numberWithInt:state]])
-        [[self.viewOnce objectForKey:[NSNumber numberWithInt:state]] removeAllObjects];
-}
-
--(void)removeAllForevers:(int)state
-{
-    if ([self.viewForever objectForKey:[NSNumber numberWithInt:state]])
-        [[self.viewForever objectForKey:[NSNumber numberWithInt:state]] removeAllObjects];
 }
 
 // some general stuff

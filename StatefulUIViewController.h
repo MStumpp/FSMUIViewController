@@ -24,17 +24,7 @@
 
 -(State*)configureState:(int)state;
 -(State*)configureDefaultState;
--(void)toState:(int)state;
--(void)toDefaultState;
-
-// view queue related
-
--(void)onViewState:(int)state doOnce:(ViewCallback)callback;
--(void)onViewState:(int)state when:(BOOL)when doOnce:(ViewCallback)callback;
--(void)onViewState:(int)state doForever:(ViewCallback)callback;
--(void)onViewState:(int)state when:(BOOL)when doForever:(ViewCallback)callback;
-
--(void)removeAllOnces:(int)state;
--(void)removeAllForevers:(int)state;
+-(void)toStateForce:(int)state;
+-(void)toDefaultStateForce;
 
 @end
