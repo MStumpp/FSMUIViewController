@@ -122,31 +122,12 @@
     [self toStateForce:self.defaultState];
 }
 
--(void)processViewStates:(int)state
-{
-    if ([self.viewForever objectForKey:[NSNumber numberWithInt:state]]) {
-        [[self.viewForever objectForKey:[NSNumber numberWithInt:state]] 
-            enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
-            ((ViewCallback)object)();
-        }];
-    }
-    
-    if ([self.viewOnce objectForKey:[NSNumber numberWithInt:state]]) {
-        [[self.viewOnce objectForKey:[NSNumber numberWithInt:state]] 
-            enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
-            ((ViewCallback)object)();
-        }];
-        [[self.viewOnce objectForKey:[NSNumber numberWithInt:state]] removeAllObjects];
-    }
-}
-
 // some general stuff
 
 -(void)processStateOnInit
 {
     [(State*)[self.states objectForKey:[NSNumber 
         numberWithInt:self.currentState]] processState:tDidInitViewState];
-    [self processViewStates:tDidInitViewState];
     [self processStateOnViewDidLoad];
 }
 
@@ -159,7 +140,6 @@
             [(State*)[self.states objectForKey:[NSNumber 
                 numberWithInt:self.currentState]] processState:tDidLoadViewState];
         }
-        [self processViewStates:tDidLoadViewState];
         [self processStateOnViewWillAppear];
     }
 }
@@ -173,7 +153,6 @@
             [(State*)[self.states objectForKey:[NSNumber 
                 numberWithInt:self.currentState]] processState:tWillAppearViewState];
         }
-        [self processViewStates:tWillAppearViewState];
         [self processStateOnViewDidAppear];
     }
 }
@@ -187,7 +166,6 @@
             [(State*)[self.states objectForKey:[NSNumber 
                 numberWithInt:self.currentState]] processState:tDidAppearViewState];
         }
-        [self processViewStates:tDidAppearViewState];
     }
 }
 
