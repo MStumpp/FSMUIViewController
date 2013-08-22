@@ -124,6 +124,9 @@
 
 -(void)processStateOnInit
 {
+    if (!self.currentState)
+        return;
+
     [(State*)[self.states objectForKey:[NSNumber 
         numberWithInt:self.currentState]] processState:tDidInitViewState];
     [self processStateOnViewDidLoad];
@@ -131,6 +134,9 @@
 
 -(void)processStateOnViewDidLoad
 {
+    if (!self.currentState)
+        return;
+
     if (tDidLoadViewState <= self.currentControllerViewState &&
         self.currentControllerViewState <= tDidAppearViewState) {
         if (self.currentProcessedViewState < tDidLoadViewState) {
@@ -144,6 +150,9 @@
 
 -(void)processStateOnViewWillAppear
 {
+    if (!self.currentState)
+        return;
+
     if (tWillAppearViewState <= self.currentControllerViewState &&
         self.currentControllerViewState <= tDidAppearViewState) {
         if (self.currentProcessedViewState < tWillAppearViewState) {
@@ -157,6 +166,9 @@
 
 -(void)processStateOnViewDidAppear
 {
+    if (!self.currentState)
+        return;
+    
     if (tDidAppearViewState <= self.currentControllerViewState &&
         self.currentControllerViewState <= tDidAppearViewState) {
         if (self.currentProcessedViewState < tDidAppearViewState) {
