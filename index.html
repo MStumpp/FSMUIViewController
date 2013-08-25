@@ -70,9 +70,9 @@
 <h3>
 <a name="configure-some-states-at-once" class="anchor" href="#configure-some-states-at-once"><span class="octicon octicon-link"></span></a>Configure some States at once</h3>
 
-<p>This functionality allows for providing some code to be executed on a certain set of states.</p>
+<p>This functionality allows for providing some code to be executed on a certain set of states. Use Array Literals with State's names.</p>
 
-<pre><code>[[self configureStates:@"state1", @"state2"] onViewState:tDidAppearViewState do:^{
+<pre><code>[[self configureStates:@[@"state1", @"state2"]] onViewState:tDidAppearViewState do:^{
    ...do something
 }];
 </code></pre>
@@ -101,7 +101,7 @@
 </ul><h3>
 <a name="transition-in-a-certain-state" class="anchor" href="#transition-in-a-certain-state"><span class="octicon octicon-link"></span></a>Transition IN a certain State</h3>
 
-<pre><code>[[self configureState:@"state1" mode:tIn] onViewState:tDidAppearViewState do:^{
+<pre><code>[[self configureState:@"state1"] onViewState:tDidAppearViewState mode:tIn do:^{
    ...do something
 }];
 </code></pre>
@@ -109,7 +109,7 @@
 <h3>
 <a name="transition-out-of-a-certain-state" class="anchor" href="#transition-out-of-a-certain-state"><span class="octicon octicon-link"></span></a>Transition OUT of a certain State</h3>
 
-<pre><code>[[self configureState:@"state1" mode:tOut] onViewState:tDidAppearViewState do:^{
+<pre><code>[[self configureState:@"state1"] onViewState:tDidAppearViewState mode:tOut do:^{
    ...do something
 }];
 </code></pre>
@@ -117,7 +117,7 @@
 <h3>
 <a name="transition-in-and-out-of-a-certain-state" class="anchor" href="#transition-in-and-out-of-a-certain-state"><span class="octicon octicon-link"></span></a>Transition IN and OUT of a certain State</h3>
 
-<pre><code>[[self configureState:@"state1" mode:tInOut] onViewState:tDidAppearViewState do:^{
+<pre><code>[[self configureState:@"state1"] onViewState:tDidAppearViewState mode:tInOut do:^{
    ...do something
 }];
 </code></pre>
@@ -128,7 +128,7 @@
 <h3>
 <a name="transition-to-a-certain-state" class="anchor" href="#transition-to-a-certain-state"><span class="octicon octicon-link"></span></a>Transition to a certain State</h3>
 
-<pre><code>-(BOOL)toState:(int)state;
+<pre><code>-(BOOL)toState:(NSString*)state;
 </code></pre>
 
 <p>Do nothing, if you are already in that state.</p>
@@ -144,7 +144,7 @@
 <h3>
 <a name="forced-transition-to-a-certain-state" class="anchor" href="#forced-transition-to-a-certain-state"><span class="octicon octicon-link"></span></a>Forced transition to a certain State</h3>
 
-<pre><code>-(BOOL)toStateForce:(int)state;
+<pre><code>-(BOOL)toStateForce:(NSString*)state;
 </code></pre>
 
 <p>Do move, even if you are already in that state.</p>
