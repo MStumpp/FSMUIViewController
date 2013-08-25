@@ -67,11 +67,66 @@
 }];
 </code></pre>
 
-<h2>
-<a name="moving-between-states" class="anchor" href="#moving-between-states"><span class="octicon octicon-link"></span></a>Moving between States</h2>
+<h3>
+<a name="configure-some-states-at-once" class="anchor" href="#configure-some-states-at-once"><span class="octicon octicon-link"></span></a>Configure some States at once</h3>
+
+<p>This functionality allows for providing some code to be executed on a certain set of states.</p>
+
+<pre><code>[[self configureStates:@"state1", @"state2"] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
 
 <h3>
-<a name="move-to-a-certain-state" class="anchor" href="#move-to-a-certain-state"><span class="octicon octicon-link"></span></a>Move to a certain State</h3>
+<a name="configure-all-states-at-once" class="anchor" href="#configure-all-states-at-once"><span class="octicon octicon-link"></span></a>Configure all States at once</h3>
+
+<p>This functionality allows for providing some code to be executed on each state.</p>
+
+<pre><code>[[self configureAllStates] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
+
+<h2>
+<a name="transition-inout-of-a-state" class="anchor" href="#transition-inout-of-a-state"><span class="octicon octicon-link"></span></a>Transition IN/OUT of a state</h2>
+
+<p>If not explicitly provided, code is executed while transitioning into a certain state. It is possible to configure this behavior.</p>
+
+<p>Available modes are:</p>
+
+<ul>
+<li>tIn</li>
+<li>tOut</li>
+<li>tInOut</li>
+</ul><h3>
+<a name="transition-in-a-certain-state" class="anchor" href="#transition-in-a-certain-state"><span class="octicon octicon-link"></span></a>Transition IN a certain State</h3>
+
+<pre><code>[[self configureState:@"state1" mode:tIn] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
+
+<h3>
+<a name="transition-out-of-a-certain-state" class="anchor" href="#transition-out-of-a-certain-state"><span class="octicon octicon-link"></span></a>Transition OUT of a certain State</h3>
+
+<pre><code>[[self configureState:@"state1" mode:tOut] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
+
+<h3>
+<a name="transition-in-and-out-of-a-certain-state" class="anchor" href="#transition-in-and-out-of-a-certain-state"><span class="octicon octicon-link"></span></a>Transition IN and OUT of a certain State</h3>
+
+<pre><code>[[self configureState:@"state1" mode:tInOut] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
+
+<h2>
+<a name="transitioning-between-states" class="anchor" href="#transitioning-between-states"><span class="octicon octicon-link"></span></a>Transitioning between States</h2>
+
+<h3>
+<a name="transition-to-a-certain-state" class="anchor" href="#transition-to-a-certain-state"><span class="octicon octicon-link"></span></a>Transition to a certain State</h3>
 
 <pre><code>-(void)toState:(int)state;
 </code></pre>
@@ -79,7 +134,7 @@
 <p>Do nothing, if you are already in that state.</p>
 
 <h3>
-<a name="move-to-the-default-state" class="anchor" href="#move-to-the-default-state"><span class="octicon octicon-link"></span></a>Move to the default State</h3>
+<a name="transition-to-the-default-state" class="anchor" href="#transition-to-the-default-state"><span class="octicon octicon-link"></span></a>Transition to the default State</h3>
 
 <pre><code>-(void)toDefaultState;
 </code></pre>
@@ -87,7 +142,7 @@
 <p>Do nothing, if you are already in that state.</p>
 
 <h3>
-<a name="forced-move-to-a-certain-state" class="anchor" href="#forced-move-to-a-certain-state"><span class="octicon octicon-link"></span></a>Forced move to a certain State</h3>
+<a name="forced-transition-to-a-certain-state" class="anchor" href="#forced-transition-to-a-certain-state"><span class="octicon octicon-link"></span></a>Forced transition to a certain State</h3>
 
 <pre><code>-(void)toStateForce:(int)state;
 </code></pre>
@@ -95,7 +150,7 @@
 <p>Do move, even if you are already in that state.</p>
 
 <h3>
-<a name="forced-move-to-the-default-state" class="anchor" href="#forced-move-to-the-default-state"><span class="octicon octicon-link"></span></a>Forced move to the default State</h3>
+<a name="forced-transition-to-the-default-state" class="anchor" href="#forced-transition-to-the-default-state"><span class="octicon octicon-link"></span></a>Forced transition to the default State</h3>
 
 <pre><code>-(void)toDefaultStateForce;
 </code></pre>
