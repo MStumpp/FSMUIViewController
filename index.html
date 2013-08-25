@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>FSMUIViewController by MStumpp</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>FSMUIViewController</h1>
+        <p></p>
+
+        <p class="view"><a href="https://github.com/MStumpp/StatefulUIViewController">View the Project on GitHub <small>MStumpp/StatefulUIViewController</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/MStumpp/StatefulUIViewController/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/MStumpp/StatefulUIViewController/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/MStumpp/StatefulUIViewController">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>FSMUIViewController is an UIViewController extended by Finite State Machine (FSM) functionality. It provides functionality to configure different states and then move between these states.</p>
+
+<h2>
+<a name="configuration-of-states" class="anchor" href="#configuration-of-states"><span class="octicon octicon-link"></span></a>Configuration of States</h2>
+
+<p>This section discusses how to configuration of custom view controller states and fixed view controller states.</p>
+
+<p>Each fsm state definition consists of two different parts:</p>
+
+<ul>
+<li>The identifier of the fsm state, which is defined by an arbitrary string, e.g. "state1". There is also a default state.</li>
+<li>For each fsm state defined before, code to be executed in that state has to be assigned to some view controller state controlled by UIViewController.</li>
+</ul><p>The following view controller states are available:</p>
+
+<ul>
+<li>tDidInitViewState</li>
+<li>tDidLoadViewState</li>
+<li>tWillAppearViewState</li>
+<li>tDidAppearViewState</li>
+<li>tWillDisappearViewState</li>
+<li>tDidDisappearViewState</li>
+<li>tWillUnloadViewState</li>
+<li>tDidUnloadViewState</li>
+</ul><h3>
+<a name="configure-an-arbitrary-state" class="anchor" href="#configure-an-arbitrary-state"><span class="octicon octicon-link"></span></a>Configure an arbitrary State</h3>
+
+<pre><code>[[self configureState:@"state1"] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
+
+<h3>
+<a name="configure-the-default-state" class="anchor" href="#configure-the-default-state"><span class="octicon octicon-link"></span></a>Configure the default State</h3>
+
+<pre><code>[[self configureDefaultState] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
+
+<h2>
+<a name="moving-between-states" class="anchor" href="#moving-between-states"><span class="octicon octicon-link"></span></a>Moving between States</h2>
+
+<h3>
+<a name="move-to-a-certain-state" class="anchor" href="#move-to-a-certain-state"><span class="octicon octicon-link"></span></a>Move to a certain State</h3>
+
+<pre><code>-(void)toState:(int)state;
+</code></pre>
+
+<p>Do nothing, if you are already in that state.</p>
+
+<h3>
+<a name="move-to-the-default-state" class="anchor" href="#move-to-the-default-state"><span class="octicon octicon-link"></span></a>Move to the default State</h3>
+
+<pre><code>-(void)toDefaultState;
+</code></pre>
+
+<p>Do nothing, if you are already in that state.</p>
+
+<h3>
+<a name="forced-move-to-a-certain-state" class="anchor" href="#forced-move-to-a-certain-state"><span class="octicon octicon-link"></span></a>Forced move to a certain State</h3>
+
+<pre><code>-(void)toStateForce:(int)state;
+</code></pre>
+
+<p>Do move, even if you are already in that state.</p>
+
+<h3>
+<a name="forced-move-to-the-default-state" class="anchor" href="#forced-move-to-the-default-state"><span class="octicon octicon-link"></span></a>Forced move to the default State</h3>
+
+<pre><code>-(void)toDefaultStateForce;
+</code></pre>
+
+<p>Do move, even if you are already in that state.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/MStumpp">MStumpp</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
