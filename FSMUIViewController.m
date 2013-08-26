@@ -41,10 +41,14 @@
 
 -(State*)configureState:(NSString*)state
 {
-    if (!state)
-        [NSException raise:NSInvalidArgumentException format:@"State identifier must be provided!"];
+    if (!states) {
+        NSLog(@"state must be provided");
+        return NULL;    
+    }
+
     if (![self.states objectForKey:state])
         [self.states setObject:[[State alloc] initWithName:state] forKey:state];
+
     return [self.states objectForKey:state];
 }
 
@@ -55,20 +59,42 @@
 
 -(StateSet*)configureStates:(NSArray*)states
 {
-    if (!states)
-        [NSException raise:NSInvalidArgumentException format:@"States must be provided!"];
+    if (!states) {
+        NSLog(@"state must be provided");
+        return NULL;    
+    }
 
     NSMutableArray *array = [[NSMutableArray alloc] init];
     [self.states enumerateKeysAndObjectsUsingBlock: ^(id key, id obj, BOOL *stop) {
         if ([states containsObject:key])
             [array addObject:obj];
     }]; 
+
     return [[StateSet alloc] initWithStates:array];         
 }
 
 -(StateSet*)configureAllStates
 {
    return [self configureStates:[self.states allKeys]]; 
+}
+
+-(BOOL)setDefaultState:(NSString*)state
+{
+    if (!states) {
+        NSLog(@"state must be provided");
+        return FALSE;    
+    }
+
+    if ([self.defaultState isEqualToString:state]) {
+        NSLog(@"current default state is equal to rquested state");
+        return FALSE;   
+    }
+
+    State *tmp = [self.states objectForKey:self.defaultState];
+    [self.states removeObjectForKey:self.defaultState];
+    [self.states setObject:tmp forKey:state];
+    self.defaultState = state;
+    return TRUE;
 }
 
 // state transition
@@ -80,10 +106,15 @@
 
 -(BOOL)toState:(NSString*)state
 {
-    if (!state || ![self.states objectForKey:state])
-        [NSException raise:NSInvalidArgumentException format:@"State not configured!"];
+    if (!state || ![self.states objectForKey:state]) {
+        NSLog(@"state doesn't exists");
+        return FALSE;
+    }
+        
     if (![self.currentState isEqualToString:state])
         return [self toStateForce:state];
+
+    NSLog(@"already in requested state");
     return FALSE;      
 }
 
@@ -94,14 +125,27 @@
 
 -(BOOL)toStateForce:(NSString*)state
 {
-    if (!state || ![self.states objectForKey:state])
-        [NSException raise:NSInvalidArgumentException format:@"State not configured!"]; 
+    if (!state || ![self.states objectForKey:state]) {
+        NSLog(@"state doesn't exists");
+        return FALSE;  
+    }
+
+    if (![self transitionFrom:self.currentState to:state]) {
+        NSLog(@"state transition not allowed");
+        return FALSE;
+    }
+
     self.previousState = self.currentState;   
     self.currentState = state; 
-    if ([self respondsToSelector:@selector(transitionFrom:to:))
-        if (![self transitionFrom:self.previousState to:self.currentState])
-            return FALSE;
+
     [self processStateOnInit];
+    return TRUE;
+}
+
+// may be overwritten in sub class
+
+-(BOOL)transitionFrom:(State*)from to:(State*)to
+{
     return TRUE;
 }
 

@@ -25,9 +25,9 @@
 
 // transition modes
 
-#define tIn 1;
-#define tOut 2;
-#define tInOut 3;
+#define tIn 01
+#define tOut 02
+#define tInOut 03
 
 typedef void(^ViewCallback)();
 

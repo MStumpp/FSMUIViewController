@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "State.h"
+#import "StateSet.h"
 
 @interface FSMUIViewController : UIViewController
 
@@ -19,6 +20,8 @@
 -(StateSet*)configureStates:(NSArray*)states;
 -(StateSet*)configureAllStates;
 
+-(BOOL)setDefaultState:(NSString*)state;
+
 // state transition
 
 -(BOOL)toState:(NSString*)state;
@@ -27,4 +30,5 @@
 -(BOOL)toStateForce:(NSString*)state;
 -(BOOL)toDefaultStateForce;
 
+-(BOOL)transitionFrom:(State*)from to:(State*)to;
 @end

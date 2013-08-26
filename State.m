@@ -36,7 +36,7 @@
     if (mode == tIn || mode == tInOut)
         [self addTransitionInViewState:viewState do:callback];
 
-    if (mode == tOut || mode == tInOut) {
+    if (mode == tOut || mode == tInOut)
         [self addTransitionOutViewState:viewState do:callback];
 
     return self;
@@ -44,24 +44,26 @@
 
 -(void)addTransitionInViewState:(int)viewState do:(ViewCallback)callback
 {
-    if (![self.transitionIn objectForKey:viewState])
-        [self.transitionIn setObject:[NSMutableArray arrayWithObject:callback] forKey:viewState]];
-    else
-        [[self.transitionIn objectForKey:viewState] addObject:callback];
+    if (![self.transitionIn objectForKey:[NSNumber numberWithInteger:viewState]]) {
+        [self.transitionIn setObject:[NSMutableArray arrayWithObject:callback] forKey:[NSNumber numberWithInteger:viewState]];
+    } else {
+        [[self.transitionIn objectForKey:[NSNumber numberWithInteger:viewState]] addObject:callback];
+    }
 }
 
 -(void)addTransitionOutViewState:(int)viewState do:(ViewCallback)callback
 {
-    if (![self.transitionOut objectForKey:viewState])
-        [self.transitionOut setObject:[NSMutableArray arrayWithObject:callback] forKey:viewState]];
-    else
-        [[self.transitionOut objectForKey:viewState] addObject:callback];
+    if (![self.transitionOut objectForKey:[NSNumber numberWithInteger:viewState]]) {
+        [self.transitionOut setObject:[NSMutableArray arrayWithObject:callback] forKey:[NSNumber numberWithInteger:viewState]];
+    } else {
+        [[self.transitionOut objectForKey:[NSNumber numberWithInteger:viewState]] addObject:callback];
+    }
 }
 
 -(BOOL)processStateIn:(int)viewState
 {
-    if ([self.transitionIn objectForKey:state]) {
-        [[self.transitionIn objectForKey:state] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+    if ([self.transitionIn objectForKey:[NSNumber numberWithInteger:viewState]]) {
+        [[self.transitionIn objectForKey:[NSNumber numberWithInteger:viewState]] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
             ((ViewCallback)object)();
         }];
     }
@@ -70,8 +72,8 @@
 
 -(BOOL)processStateOut:(int)viewState
 {
-    if ([self.transitionOut objectForKey:state]) {
-        [[self.transitionOut objectForKey:state] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+    if ([self.transitionOut objectForKey:[NSNumber numberWithInteger:viewState]]) {
+        [[self.transitionOut objectForKey:[NSNumber numberWithInteger:viewState]] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
             ((ViewCallback)object)();
         }];
     }

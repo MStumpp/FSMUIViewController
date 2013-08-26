@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "State.h"
+
+typedef void(^ViewCallback)();
 
 @interface StateSet : NSObject
 -(id)initWithStates:(NSArray*)states;
