@@ -60,14 +60,6 @@
 </code></pre>
 
 <h3>
-<a name="configure-the-default-state" class="anchor" href="#configure-the-default-state"><span class="octicon octicon-link"></span></a>Configure the default State</h3>
-
-<pre><code>[[self configureDefaultState] onViewState:tDidAppearViewState do:^{
-   ...do something
-}];
-</code></pre>
-
-<h3>
 <a name="configure-some-states-at-once" class="anchor" href="#configure-some-states-at-once"><span class="octicon octicon-link"></span></a>Configure some States at once</h3>
 
 <p>This functionality allows for providing some code to be executed on a certain set of states. Use Array Literals with State's names.</p>
@@ -83,6 +75,14 @@
 <p>This functionality allows for providing some code to be executed on each state.</p>
 
 <pre><code>[[self configureAllStates] onViewState:tDidAppearViewState do:^{
+   ...do something
+}];
+</code></pre>
+
+<h3>
+<a name="configure-the-default-state" class="anchor" href="#configure-the-default-state"><span class="octicon octicon-link"></span></a>Configure the default State</h3>
+
+<pre><code>[[self configureDefaultState] onViewState:tDidAppearViewState do:^{
    ...do something
 }];
 </code></pre>
