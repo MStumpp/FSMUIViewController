@@ -9,37 +9,73 @@
 #import "State.h"
 
 @interface State()
-@property NSMutableDictionary *states;
+@property NSMutableDictionary *transitionIn;
+@property NSMutableDictionary *transitionOut;
 @end
 
 @implementation State
 
--(id)initWithName:(int)name
+-(id)initWithName:(NSString*)name
 {
     self = [super init];
     if (self) {
         self.name = name;
-        self.states = [NSMutableDictionary dictionary];
+        self.transitionIn = [NSMutableDictionary dictionary];
+        self.transitionOut = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
--(State*)onViewState:(int)state do:(ViewCallback)callback
+-(State*)onViewState:(int)viewState do:(ViewCallback)callback
 {
-    if (![self.states objectForKey:[NSNumber numberWithInt:state]])
-        [self.states addEntriesFromDictionary:[NSDictionary dictionaryWithObject:[NSMutableArray arrayWithObject:callback] forKey:[NSNumber numberWithInt:state]]];
-    else
-        [[self.states objectForKey:[NSNumber numberWithInt:state]] addObject:callback];
+    return [self onViewState:viewState mode:tIn do:callback];
+}
+
+-(State*)onViewState:(int)viewState mode:(int)mode do:(ViewCallback)callback
+{
+    if (mode == tIn || mode == tInOut)
+        [self addTransitionInViewState:viewState do:callback];
+
+    if (mode == tOut || mode == tInOut) {
+        [self addTransitionOutViewState:viewState do:callback];
+
     return self;
 }
 
--(void)processState:(int)state
+-(void)addTransitionInViewState:(int)viewState do:(ViewCallback)callback
 {
-    if ([self.states objectForKey:[NSNumber numberWithInt:state]]) {
-        [[self.states objectForKey:[NSNumber numberWithInt:state]] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+    if (![self.transitionIn objectForKey:viewState])
+        [self.transitionIn setObject:[NSMutableArray arrayWithObject:callback] forKey:viewState]];
+    else
+        [[self.transitionIn objectForKey:viewState] addObject:callback];
+}
+
+-(void)addTransitionOutViewState:(int)viewState do:(ViewCallback)callback
+{
+    if (![self.transitionOut objectForKey:viewState])
+        [self.transitionOut setObject:[NSMutableArray arrayWithObject:callback] forKey:viewState]];
+    else
+        [[self.transitionOut objectForKey:viewState] addObject:callback];
+}
+
+-(BOOL)processStateIn:(int)viewState
+{
+    if ([self.transitionIn objectForKey:state]) {
+        [[self.transitionIn objectForKey:state] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
             ((ViewCallback)object)();
         }];
     }
+    return TRUE;
+}
+
+-(BOOL)processStateOut:(int)viewState
+{
+    if ([self.transitionOut objectForKey:state]) {
+        [[self.transitionOut objectForKey:state] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+            ((ViewCallback)object)();
+        }];
+    }
+    return TRUE;
 }
 
 @end
