@@ -18,9 +18,9 @@
 -(State*)configureDefaultState;
 
 -(StateSet*)configureStates:(NSArray*)states;
--(StateSet*)configureAllStates;
+-(State*)configureAllStates;
 
--(BOOL)setDefaultState:(NSString*)state;
+-(void)setDefaultState:(NSString*)state;
 
 // state transition
 
@@ -31,4 +31,13 @@
 -(BOOL)toDefaultStateForce;
 
 -(BOOL)transitionFrom:(State*)from to:(State*)to;
+
+// query
+
+-(State*)state:(NSString*)state;
+-(State*)defaultState;
+-(State*)currentState;
+-(State*)prevState;
+-(BOOL)inState:(NSString*)state;
+
 @end

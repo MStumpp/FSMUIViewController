@@ -9,7 +9,7 @@
 #import "StateSet.h"
 
 @interface StateSet()
-@property NSArray *states;
+@property (nonatomic, strong) NSArray *states;
 @end
 
 @implementation StateSet
@@ -31,11 +31,7 @@
 -(StateSet*)onViewState:(int)viewState mode:(int)mode do:(ViewCallback)callback
 {
     [self.states enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
-        if (mode == tIn || mode == tInOut)
-            [object addTransitionInViewState:viewState do:callback];
-
-        if (mode == tOut || mode == tInOut)
-            [object addTransitionOutViewState:viewState do:callback];
+        [object onViewState:viewState mode:mode do:callback];
     }];
     return self;
 }
